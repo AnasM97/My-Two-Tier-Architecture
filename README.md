@@ -1,6 +1,7 @@
 # My-Two-Tier-Architecture
 
 Creating My VPC
+
 - Went to AWS and created VPC
 - Changed the IPv4 CIDR to 	10.0.0.0/16 so as to have large range of private addresses for many subnets and resources to be created without running out of IP addresses.
   - /16 = First 16 bits are fixed, rest used for hosts -> 
