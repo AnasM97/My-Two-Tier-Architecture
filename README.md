@@ -45,17 +45,34 @@ Creating an Internet Gateway
 - The type was MySQL/Aurora , port 3306
 
 ## Launching DB Server
+- Launched 2nd EC2 Instance with same AMI,Key pair and instance type
+- Connected to VPC and made subnet the Private Subnet
+- Made SG = DB-SG
+- Disabled auto-assign public ip
 
+# Entering into DB-Server from Web-Server and installing MySQL
+- I could not ssh directly into DB-Server since it was in a private subnet
+- So I had get into the DB-Server from the Web-Server
+- Instead of ssh using the Public IP, I had to use the Private IP of the DB-Server.
+- Initial Attempt to Enter into Private Server.
+  - SSH directly into Public server but failed to SSH into Private Server.
+  - My Key pair was not recognised since it was in my local machine and not in my server.
+- Second Attempt
+  - Used Agent Forwading to forward my SSH key from my laptop through the public jump server so the private server could authenticate without the public server storing the key.
+  - I tried to proxy jump directly from my local machine into the DB Server with my Web Server acting as a jump host, relaying my SSH connection.
+  - SSH tried to authenticate to the Web Server but the server rejected the key I provided.
 
 
 ## Commands Used
-sudo apt update
-sudo apt upgrade -y 
-sudo apt install nginx -y
-sudo systemctl start nginx
-sudo systemctl enable nginx
-sudo systtmectl status nginx 
-
+- ssh i - keypair.pem ubuntu@web-server-public-ip
+- sudo apt update
+- sudo apt upgrade -y 
+- sudo apt install nginx -y
+- sudo systemctl start nginx
+- sudo systemctl enable nginx
+- sudo systtmectl status nginx 
+- ssh i - keypair.pem ubuntu@db-server-private-ip
+- 
 
 
 
@@ -81,3 +98,7 @@ sudo systtmectl status nginx
 - Security Group : A virtual firewall attached to a resource that controls which traffic is allowed in and out based on IP, port, and protocol.
 
 - Amazon Machine Image(AMI) : An AMI contains the operating system, application server, and applications for your instance.
+
+- ProxyJump (ssh -J) : A way to connect to a target server through an intermediate server (jump host) in a single command.
+
+- Agent forwarding (ssh -A) : Allows you to use your local keys on a remote server without copying the private key to that server.
