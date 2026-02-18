@@ -20,16 +20,41 @@
 Creating an Internet Gateway
 - Created an IGW and the connected it to the VPC
 
-## 
+## Route Table for Public Subnet
+- Found the route table attached to my VPC and renamed it to PUBLIC-RT
+- Next I added an internet route and its target was the IGW I created
+- Had to associate my public subnet with the route table and now anything in my public subnet can reach the internet
 
+## Launch Web Server in Public Subnet
+- Created an EC2 Instance with my AMI being Ubuntu
+- Instance type = t3.micro
+- In the network settings I changed the VPC and set the subnet to my Public Subnet
+- Set the source type for my ssh (security group) to my IP
+  - I should have used the Public IP of the instance instead of my personal IP address
+- Created a new Security group for HTTP , port 80 called Web-SG
+  -  Made the source type anywhere (0.0.0.0/0) so that users can access my server from the internet
+- SSH into my instance from VSCode
+  - Also forgot to go to my ssh directory instead I SSH from my current directory
+- Installed nginx and initially tried to go onto the website from my public IP Addresses link from my instance
+  - This led to a problem where I was not seeing the nginx html file so I had to check if it was running
+  - I then realised that the link was https://public-ip instead of http
 
+## Creating security group for DB Server
+- Created a new SG and linked to my VPC
+- I changed the inbound rules so that only instances with security group Web-SG
+- The type was MySQL/Aurora , port 3306
+
+## Launching DB Server
 
 
 
 ## Commands Used
-
-
-
+sudo apt update
+sudo apt upgrade -y 
+sudo apt install nginx -y
+sudo systemctl start nginx
+sudo systemctl enable nginx
+sudo systtmectl status nginx 
 
 
 
@@ -50,8 +75,9 @@ Creating an Internet Gateway
 
 - Route Tables : A set of rules in a VPC that tell network traffic where to go next
   - Network Traffic : The flow of data being sent and received between computers over a network.
- 
+
 - Network Address Translation Gateweay(NAT): A service that lets private subnet resources access the internet without allowing the internet to initiate connections back to them.
 
-
 - Security Group : A virtual firewall attached to a resource that controls which traffic is allowed in and out based on IP, port, and protocol.
+
+- Amazon Machine Image(AMI) : An AMI contains the operating system, application server, and applications for your instance.
