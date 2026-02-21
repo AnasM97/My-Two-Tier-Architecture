@@ -77,6 +77,16 @@ Creating an Internet Gateway
 - By default, MySQL only listens on 127.0.0.1, so it accepts connections from the local machine only.
 - Changing the bind-address to 0.0.0.0 allows it accept connections from everywhere but since it is in a private server it will only allow connections from my public web server.
 - I then restarted mysql which applied the changes.
+
+## Creating a databse and connecting to Web Server
+- First I had to log into mysql as root user where I can create my MYSQL database on my private server.
+- I created the database and named it devopsapp.
+- I initially made my first user to connect from any host(%) but I accidently changed that to only connect from my private server which is why later I could not connect my database from my Public Web Server
+- The inital password also did not fit the requirements I set earlier which was only a minimum of 8 characters
+- Afterwards, I created a user who could only connect from my private database however this time my password fit the requirements.
+- Consquently from the above actions, I had to drop the user and then create another user again who could access from any host.
+- 
+- 
 - 
 
 ## Commands Used
@@ -100,10 +110,16 @@ Creating an Internet Gateway
 - sudo nano /etc/mysql/mysql.conf.d/mysqld.cnf
 - sudo systemctl restart mysql
 -  sudo mysql -u root -p
-  - CREATE DATABASE devopsapp;
-  - CREATE USER 'appuser'@'%' IDENTIFIED BY 'password123'; -> Password does not meet MYSQL requirements
-  - CREATE USER 'appuser'@'10.0.0.81' IDENTIFIED BY 'Str0ng!Passw0rd2026';
-  - GRANT ALL PRIVILEGES ON devopsapp.* TO 'appuser'@'privat-server-ip';
+  -> REATE DATABASE devopsapp;
+  -> CREATE USER 'appuser'@'%' IDENTIFIED BY 'password123'; -> Password does not meet MYSQL requirements
+  -> CREATE USER 'appuser'@'private-server-ip' IDENTIFIED BY 'Str0ng!Passw0rd2026';
+  -> GRANT ALL PRIVILEGES ON devopsapp.* TO 'appuser'@'privat-server-ip';
+  -> FLUSH PRIVILEGES;
+  -> EXIT;
+New SQL
+  - DROP USER 'appuser'@'10.0.0.81';
+  - CREATE USER 'appuser'@'%' IDENTIFIED BY 'Str0ng!Passw0rd2026';
+  - GRANT ALL PRIVILEGES ON devopsapp.* TO 'appuser'@'%';
   - FLUSH PRIVILEGES;
   - EXIT;
 - sudo apt install mysql-client -y
