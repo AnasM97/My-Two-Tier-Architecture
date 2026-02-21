@@ -110,12 +110,12 @@ Creating an Internet Gateway
 - sudo nano /etc/mysql/mysql.conf.d/mysqld.cnf
 - sudo systemctl restart mysql
 -  sudo mysql -u root -p
-  -> REATE DATABASE devopsapp;
-  -> CREATE USER 'appuser'@'%' IDENTIFIED BY 'password123'; -> Password does not meet MYSQL requirements
-  -> CREATE USER 'appuser'@'private-server-ip' IDENTIFIED BY 'Str0ng!Passw0rd2026';
-  -> GRANT ALL PRIVILEGES ON devopsapp.* TO 'appuser'@'privat-server-ip';
-  -> FLUSH PRIVILEGES;
-  -> EXIT;
+  - REATE DATABASE devopsapp;
+  - CREATE USER 'appuser'@'%' IDENTIFIED BY 'password123'; -> Password does not meet MYSQL requirements
+  - CREATE USER 'appuser'@'private-server-ip' IDENTIFIED BY 'Str0ng!Passw0rd2026';
+  - RANT ALL PRIVILEGES ON devopsapp.* TO 'appuser'@'privat-server-ip';
+  - FLUSH PRIVILEGES;
+  - EXIT;
 New SQL
   - DROP USER 'appuser'@'10.0.0.81';
   - CREATE USER 'appuser'@'%' IDENTIFIED BY 'Str0ng!Passw0rd2026';
