@@ -56,11 +56,17 @@ Creating an Internet Gateway
 - Instead of ssh using the Public IP, I had to use the Private IP of the DB-Server.
 - Initial Attempt to Enter into Private Server.
   - SSH directly into Public server but failed to SSH into Private Server.
-  - My Key pair was not recognised since it was in my local machine and not in my server.
+  - My key pair was not recognised since it was storede in my local machine and not in my public server.
 - Second Attempt
   - Used Agent Forwading to forward my SSH key from my laptop through the public jump server so the private server could authenticate without the public server storing the key.
   - I tried to proxy jump directly from my local machine into the DB Server with my Web Server acting as a jump host, relaying my SSH connection.
   - SSH tried to authenticate to the Web Server but the server rejected the key I provided.
+- Final Attempt
+  - I started an SSH Agent and loaded my private key into it
+  - Forwarded my local SSH agent to the public server and enabled the public server to authenticate to the private server using my laptop’s key.
+  -  The authentication request was forwarded back to my laptop’s SSH agent and then the private server was authenticated using my local key without being copied or temporarily stored in the public server.
+- Attempted to instal MySQL but my private server had no access to the public server.
+- I had 2 choices between a NAT Gateway(paid) or to use an Elastic IP then release it afterwards so I went for the Elastic IP.
 
 
 ## Commands Used
@@ -71,7 +77,13 @@ Creating an Internet Gateway
 - sudo systemctl start nginx
 - sudo systemctl enable nginx
 - sudo systtmectl status nginx 
-- ssh i - keypair.pem ubuntu@db-server-private-ip
+- ssh i - keypair.pem ubuntu@db-server-private-ip#
+- ssh -A -J ubuntu@public-server-ip ubuntu@private-server-ip
+- eval "$(ssh-agent -s)"
+- ssh-add my-key.pem
+- ssh -A ubuntu@public-server-ip
+- ssh ubuntu@private-server-ip
+- sudo apt install mysql-server -y
 - 
 
 
@@ -102,3 +114,5 @@ Creating an Internet Gateway
 - ProxyJump (ssh -J) : A way to connect to a target server through an intermediate server (jump host) in a single command.
 
 - Agent forwarding (ssh -A) : Allows you to use your local keys on a remote server without copying the private key to that server.
+
+- Elastic IP : 
