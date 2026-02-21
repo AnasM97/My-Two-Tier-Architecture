@@ -67,7 +67,17 @@ Creating an Internet Gateway
   -  The authentication request was forwarded back to my laptop’s SSH agent and then the private server was authenticated using my local key without being copied or temporarily stored in the public server.
 - Attempted to instal MySQL but my private server had no access to the public server.
 - I had 2 choices between a NAT Gateway(paid) or to use an Elastic IP then release it afterwards so I went for the Elastic IP.
-
+- After creating the Elastic IP and connecting to my Private Server Instance, I was able to update the server and install mysql
+- Next I secured mysql by :
+  - Setting a root password
+  - Removing anonymous users
+  - Disabling remote root login
+  - Removing test database
+  - Ultimately reloading the priviledge tables so the above effects are taken immediately
+- By default, MySQL only listens on 127.0.0.1, so it accepts connections from the local machine only.
+- Changing the bind-address to 0.0.0.0 allows it accept connections from everywhere but since it is in a private server it will only allow connections from my public web server.
+- I then restarted mysql which applied the changes.
+- 
 
 ## Commands Used
 - ssh i - keypair.pem ubuntu@web-server-public-ip
@@ -84,7 +94,21 @@ Creating an Internet Gateway
 - ssh -A ubuntu@public-server-ip
 - ssh ubuntu@private-server-ip
 - sudo apt install mysql-server -y
-- 
+- sudo systemctl start mysql
+- sudo systemctl enable mysql
+- sudo mysql_secure_installation
+- sudo nano /etc/mysql/mysql.conf.d/mysqld.cnf
+- sudo systemctl restart mysql
+-  sudo mysql -u root -p
+  - CREATE DATABASE devopsapp;
+  - CREATE USER 'appuser'@'%' IDENTIFIED BY 'password123'; -> Password does not meet MYSQL requirements
+  - CREATE USER 'appuser'@'10.0.0.81' IDENTIFIED BY 'Str0ng!Passw0rd2026';
+  - GRANT ALL PRIVILEGES ON devopsapp.* TO 'appuser'@'privat-server-ip';
+  - FLUSH PRIVILEGES;
+  - EXIT;
+- sudo apt install mysql-client -y
+- mysql -h private-server-ip -u appuser -p
+
 
 
 
@@ -115,4 +139,4 @@ Creating an Internet Gateway
 
 - Agent forwarding (ssh -A) : Allows you to use your local keys on a remote server without copying the private key to that server.
 
-- Elastic IP : 
+- Elastic IP: A static public IPv4 address provided by AWS that you can associate with an EC2 instance.
