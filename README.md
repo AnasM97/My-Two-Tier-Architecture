@@ -85,8 +85,17 @@ Creating an Internet Gateway
 - The inital password also did not fit the requirements I set earlier which was only a minimum of 8 characters
 - Afterwards, I created a user who could only connect from my private database however this time my password fit the requirements.
 - Consquently from the above actions, I had to drop the user and then create another user again who could access from any host.
-- 
-- 
+- Even after this my web server still could not connect so I went back to the Private Server and checked the firewall only for its status to be inactive
+- I had to change yet again, the user and made 2 users who can access the database one from the private server and the public server which has a level of risk but that level is much lower compared to allowing connection from any hosts.
+- Now I can connect to my database from both my private and public server
+
+## Storing Data on Web Server
+- Made a new directory and went changed directory to myapp
+- Created a virtual environment to install my python and keep my application code separate from the Python Ubuntu needs.
+- Downloaded Flask, which is a webframework for Python, and MySQL Connector, which allows my Python program to interact with the with MySQL but specifically in this case my Database, for Python packages from Python Packages Index(PyPi).
+- Installed both on my Python 3 Environment
+- Created a file app.py in the nano text editor which is where my application code is stored.
+- Attempted to run flask but I did not have port 5000 on my SG for the Public-Server
 - 
 
 ## Commands Used
@@ -120,11 +129,27 @@ New SQL
   - DROP USER 'appuser'@'10.0.0.81';
   - CREATE USER 'appuser'@'%' IDENTIFIED BY 'Str0ng!Passw0rd2026';
   - GRANT ALL PRIVILEGES ON devopsapp.* TO 'appuser'@'%';
-  - FLUSH PRIVILEGES;
+  - FLUSH PRIVILEGES; -> Applies Changes 
   - EXIT;
 - sudo apt install mysql-client -y
 - mysql -h private-server-ip -u appuser -p
-
+- FINAL SQL
+  - CREATE USER 'appuser'@'Private-Server-IP' IDENTIFIED BY 'Str0ng!Passw0rd2026';
+  - GRANT ALL PRIVILEGES ON devopsapp.* TO 'appuser'@'Private-Server-IP';
+  - CREATE USER 'appuser'@'Public-Server-IP' IDENTIFIED BY 'Str0ng!Passw0rd2026';
+  - GRANT ALL PRIVILEGES ON devopsapp.* TO 'appuser'@'Public-Server-IP';
+  - SELECT user, host FROM mysql.user WHERE user='appuser'; -
+      - Shows 2 appusers and 2 hosts(Private+Public)
+- sudo ufw allow from 10.0.2.178 to any port 3306 proto tcp
+- sudo ufw allow from 18.170.99.118 to any port 3306 proto tcp
+- sudo ufw enable
+- mysql -u appuser -p -h private-server-ip -> From the DB Server
+- mysql -u appuser -p -h public-server-ip -> From the Web Server
+- mkdir myapp
+- cd my app
+- sudo apt install python3-venv python3-full -y
+- python3 -m venv venv
+- source venv/bin/activate
 
 
 
