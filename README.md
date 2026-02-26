@@ -65,7 +65,7 @@ Creating an Internet Gateway
   - I started an SSH Agent and loaded my private key into it
   - Forwarded my local SSH agent to the public server and enabled the public server to authenticate to the private server using my laptop’s key.
   -  The authentication request was forwarded back to my laptop’s SSH agent and then the private server was authenticated using my local key without being copied or temporarily stored in the public server.
-- Attempted to instal MySQL but my private server had no access to the public server.
+- Attempted to install MySQL but my private server had no access to the public server.
 - I had 2 choices between a NAT Gateway(paid) or to use an Elastic IP then release it afterwards so I went for the Elastic IP.
 - After creating the Elastic IP and connecting to my Private Server Instance, I was able to update the server and install mysql
 - Next I secured mysql by :
@@ -118,14 +118,14 @@ Creating an Internet Gateway
 - sudo mysql_secure_installation
 - sudo nano /etc/mysql/mysql.conf.d/mysqld.cnf
 - sudo systemctl restart mysql
--  sudo mysql -u root -p
+- sudo mysql -u root -p
   - REATE DATABASE devopsapp;
   - CREATE USER 'appuser'@'%' IDENTIFIED BY 'password123'; -> Password does not meet MYSQL requirements
   - CREATE USER 'appuser'@'private-server-ip' IDENTIFIED BY 'Str0ng!Passw0rd2026';
   - RANT ALL PRIVILEGES ON devopsapp.* TO 'appuser'@'privat-server-ip';
   - FLUSH PRIVILEGES;
   - EXIT;
-New SQL
+- New SQL
   - DROP USER 'appuser'@'10.0.0.81';
   - CREATE USER 'appuser'@'%' IDENTIFIED BY 'Str0ng!Passw0rd2026';
   - GRANT ALL PRIVILEGES ON devopsapp.* TO 'appuser'@'%';
@@ -140,8 +140,8 @@ New SQL
   - GRANT ALL PRIVILEGES ON devopsapp.* TO 'appuser'@'Public-Server-IP';
   - SELECT user, host FROM mysql.user WHERE user='appuser'; -
       - Shows 2 appusers and 2 hosts(Private+Public)
-- sudo ufw allow from 10.0.2.178 to any port 3306 proto tcp
-- sudo ufw allow from 18.170.99.118 to any port 3306 proto tcp
+- sudo ufw allow from private-server-ip to any port 3306 proto tcp
+- sudo ufw allow from public-server-ip to any port 3306 proto tcp
 - sudo ufw enable
 - mysql -u appuser -p -h private-server-ip -> From the DB Server
 - mysql -u appuser -p -h public-server-ip -> From the Web Server
